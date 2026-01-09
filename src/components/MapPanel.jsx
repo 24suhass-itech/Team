@@ -1,14 +1,21 @@
 /* global L */
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import socket from "../socket";
 
 export default function MapPanel() {
+  const mapRef = useRef(null);
+  const markerRef = useRef(null);
+
+  // Default position (same as backend)
+  const defaultPos = [11.06, 77.10];
+
   useEffect(() => {
-    const map = L.map("map").setView([12.9716, 77.5946], 16);
+    // Init map ONCE
+    mapRef.current = L.map("map").setView(defaultPos, 16);
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
-    }).addTo(map);
+    }).addTo(mapRef.current);
 
     const icon = L.icon({
       iconUrl:
@@ -17,21 +24,31 @@ export default function MapPanel() {
       iconAnchor: [12, 41],
     });
 
-    const marker = L.marker([12.9716, 77.5946], { icon }).addTo(map);
+    markerRef.current = L.marker(defaultPos, { icon }).addTo(mapRef.current);
 
+    // Static waypoints (optional)
     const waypoints = [
-      [12.9716, 77.5946],
-      [12.9722, 77.5951],
-      [12.9711, 77.596],
+      [11.06, 77.10],
+      [11.061, 77.101],
+      [11.062, 77.102],
     ];
+    L.polyline(waypoints, { color: "#2563eb" }).addTo(mapRef.current);
 
-    L.polyline(waypoints, { color: "#2563eb" }).addTo(map);
-
-    socket.on("telemetry", (t) => {
+    // Telemetry listener
+    const onTelemetry = (t) => {
       if (typeof t.lat === "number" && typeof t.lon === "number") {
-        marker.setLatLng([t.lat, t.lon]);
+        markerRef.current.setLatLng([t.lat, t.lon]);
+        mapRef.current.panTo([t.lat, t.lon]); // 🔥 THIS FIXES IT
       }
-    });
+    };
+
+    socket.on("telemetry", onTelemetry);
+
+    // Cleanup (VERY important)
+    return () => {
+      socket.off("telemetry", onTelemetry);
+      mapRef.current.remove();
+    };
   }, []);
 
   return (

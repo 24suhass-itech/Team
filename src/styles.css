@@ -1,81 +1,218 @@
 body {
   margin: 0;
   font-family: system-ui, Segoe UI, Roboto, Arial;
+  background: #f3f4f6;
 }
+
+.app {
+  transition: filter 0.35s ease;
+}
+
+.app.blurred {
+  filter: blur(6px);
+}
+
+.header {
+  height: 72px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.header-logo {
+  height: 48px;
+}
+
+.header-title {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 3px;
+}
+
 .grid {
   display: grid;
   grid-template-columns: 2fr 1fr;
-  gap: 12px;
-  padding: 12px;
+  gap: 16px;
+  padding: 16px;
 }
+
 .card {
+  background: #ffffff;
   border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 12px;
+  border-radius: 20px;
+  padding: 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer;
 }
+
+.card:hover {
+  transform: scale(1.02);
+}
+
+.section-title {
+  font-weight: 700;
+  margin: 0 0 10px 0;
+}
+
 #map {
   height: 380px;
-  border-radius: 8px;
+  border-radius: 16px;
 }
+
 .row {
   display: flex;
-  gap: 12px;
+  gap: 10px;
+  margin-bottom: 10px;
 }
+
 .kpi {
   flex: 1;
   background: #f9fafb;
-  border: 1px solid #eee;
-  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
   padding: 10px;
 }
+
 .kpi h4 {
-  margin: 0 0 6px 0;
-  font-size: 12px;
-  color: #555;
+  margin: 0 0 4px 0;
+  font-size: 11px;
+  color: #6b7280;
+  text-transform: uppercase;
 }
+
 .kpi div {
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 18px;
+  font-weight: 600;
 }
+
 .banner {
-  padding: 10px;
-  border-radius: 8px;
+  padding: 12px;
+  border-radius: 14px;
   margin-bottom: 10px;
-  display: none;
 }
+
 .warn {
   background: #fff7ed;
-  border: 1px solid #fed7aa;
   color: #9a3412;
 }
+
 .danger {
   background: #fef2f2;
-  border: 1px solid #fecaca;
   color: #991b1b;
 }
-video,
-img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
-}
-.section-title {
-  font-weight: 700;
-  margin: 0 0 8px 0;
-}
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-td {
-  padding: 6px 8px;
-  border-bottom: 1px solid #eee;
-  font-size: 14px;
-}
+
 .btn {
-  padding: 8px 10px;
+  margin-top: 8px;
+  padding: 10px 12px;
+  border-radius: 14px;
   border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  background: #fff;
+  background: #ffffff;
   cursor: pointer;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.25s ease;
+}
+
+.expanded {
+  width: 85%;
+  max-width: 1100px;
+  max-height: 85%;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 18px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+  animation: zoomIn 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  overflow: auto;
+}
+
+.close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  font-size: 28px;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.92);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.overlay .card {
+  transform: none !important;
+}
+
+.overlay .card:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+.video-card {
+  height: 340px;
+}
+
+.video-body {
+  height: calc(100% - 32px);
+  background: #000;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+.overlay .card {
+  background: transparent;
+  box-shadow: none;
+  border: none;
+  padding: 0;
+}
+.video-body {
+  height: calc(100% - 32px);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.video-off {
+  background: #ffffff;
+  color: #9ca3af;
+  border: 1px dashed #e5e7eb;
+}
+
+.video-on {
+  background: #000;
 }
